@@ -1,6 +1,8 @@
 package com.example.roguelikeexample
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.roguelikeexample.databinding.GridItemBinding
 
 class GridAdapter(val context: Context, val dungeon: Array<IntArray>) : RecyclerView.Adapter<GridAdapter.ViewHolder>() {
+
+    val _context = context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridAdapter.ViewHolder {
         val binding = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -29,15 +33,13 @@ class GridAdapter(val context: Context, val dungeon: Array<IntArray>) : Recycler
     }
 
     class ViewHolder(val binding: GridItemBinding) : RecyclerView.ViewHolder(binding.root){
+        @SuppressLint("ResourceAsColor")
         fun bind(data: Int){
 
-            binding.imageView.setImageDrawable(null)
             if(data!=0){
-//                Log.d("map_on", ""+data);
-                binding.imageView.setImageResource(R.drawable.map_on)
+                binding.imageView.setImageResource(R.color.black)
             }else{
-//                Log.d("map_off", ""+data);
-                binding.imageView.setImageResource(R.drawable.map_off)
+                binding.imageView.setImageResource(R.color.white)
             }
         }
     }

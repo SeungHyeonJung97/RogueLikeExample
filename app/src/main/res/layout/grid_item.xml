@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:adjustViewBounds="true"
     android:id="@+id/imageView"
-    tools:src="@drawable/map_off"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent" />
+    android:src="@color/black"
+    android:padding="1dp"
+    android:scaleType="centerCrop"
+    android:background="@drawable/simple_border"
+    android:layout_height="10dp"
+    android:layout_width="10dp" />

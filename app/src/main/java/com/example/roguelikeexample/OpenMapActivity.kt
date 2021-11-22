@@ -20,5 +20,9 @@ class OpenMapActivity: Activity() {
 
         val adapter = GridAdapter(this, dungeon)
         binding.gridView.adapter = adapter
+
+        binding.btnCancel.setOnClickListener{
+            finish()
+        }
     }
 }
