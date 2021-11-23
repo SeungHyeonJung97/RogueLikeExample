@@ -23,9 +23,8 @@ class MainActivity : AppCompatActivity() {
         binding.btnOpenMap.setOnClickListener {
             var intent = Intent(this, OpenMapActivity::class.java)
             intent.putExtra("dungeon", dungeon)
-            startActivityForResult(intent, 1)
+            startActivity(intent)
         }
         dungeon = createMap()
     }
-
 }
