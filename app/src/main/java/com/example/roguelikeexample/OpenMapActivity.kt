@@ -12,13 +12,10 @@ class OpenMapActivity: Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // requestWindowFeature(Window.FEATURE_NO_TITLE)
-        val dungeon = intent.getSerializableExtra("dungeon") as Array<IntArray>
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_open_map)
         binding.gridView.layoutManager = GridLayoutManager(this,25)
 
-        val adapter = GridAdapter(this, dungeon)
+        val adapter = GridAdapter(Utils.dungeon)
         binding.gridView.adapter = adapter
 
         binding.btnCancel.setOnClickListener{

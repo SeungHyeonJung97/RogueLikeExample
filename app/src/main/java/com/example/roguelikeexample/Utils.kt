@@ -2,6 +2,7 @@ package com.example.roguelikeexample
 
 import android.util.Log
 import java.lang.Math.abs
+import java.lang.Math.random
 import java.util.*
 import kotlin.random.Random
 
@@ -15,6 +16,12 @@ object Utils {
     val borderSize = 2
     var numberOfRooms = 0
     lateinit var createdRoom: Array<IntArray>
+    var hero_position = 0
+
+    init {
+        createMap()
+        randomSpawn()
+    }
 
     fun createMap(): Array<IntArray> {
         // dungeon 크기는 25 * 25
@@ -164,5 +171,20 @@ object Utils {
         return true
     }
 
+    fun randomSpawn(){
+        var isOk = false
+        while(!isOk){
+            val randomPosition = Random.nextInt(dungeon.size * dungeon.size)
+            Log.d("size","${dungeon.size}")
 
+            val x = randomPosition / 25
+            val y = randomPosition % 25
+
+            if(dungeon[x][y] != 0){
+                hero_position = randomPosition
+                dungeon[x][y] = 3
+                isOk = true
+            }
+        }
+    }
 }

@@ -9,9 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roguelikeexample.databinding.GridItemBinding
 
-class GridAdapter(val context: Context, val dungeon: Array<IntArray>) : RecyclerView.Adapter<GridAdapter.ViewHolder>() {
-
-    val _context = context
+class GridAdapter(val dungeon: Array<IntArray>) : RecyclerView.Adapter<GridAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridAdapter.ViewHolder {
         val binding = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -23,9 +21,6 @@ class GridAdapter(val context: Context, val dungeon: Array<IntArray>) : Recycler
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        Log.d("position",""+position)
-//        Log.d("dungeon.size",""+dungeon.size)
-
         val dungeon_x = position / 25 ?: 0
         val dungeon_y = position % 25 ?: 0
 
@@ -36,10 +31,10 @@ class GridAdapter(val context: Context, val dungeon: Array<IntArray>) : Recycler
         @SuppressLint("ResourceAsColor")
         fun bind(data: Int){
 
-            if(data!=0){
-                binding.imageView.setImageResource(R.color.black)
-            }else{
-                binding.imageView.setImageResource(R.color.white)
+            when(data){
+                0 -> binding.imageView.setImageResource(R.color.white)
+                1 -> binding.imageView.setImageResource(R.color.black)
+                3 -> binding.imageView.setImageResource(R.color.green)
             }
         }
     }

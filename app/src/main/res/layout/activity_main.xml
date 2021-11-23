@@ -25,10 +25,11 @@
             android:id="@+id/iv_hero"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
-            app:layout_constraintEnd_toEndOf="@+id/recyclerView"
-            app:layout_constraintStart_toStartOf="@+id/recyclerView"
-            app:layout_constraintTop_toTopOf="@+id/recyclerView"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_mainframe"
+            app:layout_constraintEnd_toEndOf="@+id/rv_mainframe"
+            app:layout_constraintStart_toStartOf="@+id/rv_mainframe"
+            app:layout_constraintTop_toTopOf="@+id/rv_mainframe"
             app:srcCompat="@drawable/hero_bottom" />
 
         <ImageView
@@ -72,13 +73,11 @@
             app:srcCompat="@drawable/right" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="448dp"
+            android:id="@+id/rv_mainframe"
+            android:layout_width="match_parent"
             android:layout_height="364dp"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="1dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

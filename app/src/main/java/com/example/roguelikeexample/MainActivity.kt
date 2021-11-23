@@ -5,14 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.databinding.DataBindingUtil
-import com.example.roguelikeexample.Utils.createMap
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.roguelikeexample.databinding.ActivityMainBinding
-import java.util.*
-import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var dungeon: Array<IntArray>
+    private var dungeon = Utils.dungeon
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,9 +20,32 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnOpenMap.setOnClickListener {
             var intent = Intent(this, OpenMapActivity::class.java)
-            intent.putExtra("dungeon", dungeon)
             startActivity(intent)
         }
-        dungeon = createMap()
+
+        binding.rvMainframe.layoutManager = GridLayoutManager(this, 7)
+
+        Log.d("hero_position", "${Utils.hero_position}")
+        val adapter = MainFrameAdapter(dungeon)
+        binding.rvMainframe.adapter = adapter
+
+        binding.ivHero.bringToFront()
+
+        binding.ivArrowTop.setOnClickListener {
+            Utils.hero_position -= dungeon.size
+            adapter.notifyDataSetChanged()
+        }
+        binding.ivArrowBottom.setOnClickListener {
+            Utils.hero_position += dungeon.size
+            adapter.notifyDataSetChanged()
+        }
+        binding.ivArrowLeft.setOnClickListener {
+            Utils.hero_position -= 1
+            adapter.notifyDataSetChanged()
+        }
+        binding.ivArrowRight.setOnClickListener {
+            Utils.hero_position += 1
+            adapter.notifyDataSetChanged()
+        }
     }
 }
