@@ -3,6 +3,7 @@ package com.example.roguelikeexample
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Color.red
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -34,7 +35,9 @@ class GridAdapter(val dungeon: Array<IntArray>) : RecyclerView.Adapter<GridAdapt
             when(data){
                 0 -> binding.imageView.setImageResource(R.color.white)
                 1 -> binding.imageView.setImageResource(R.color.black)
+                2 -> binding.imageView.setImageResource(R.color.red)
                 3 -> binding.imageView.setImageResource(R.color.green)
+                4 -> binding.imageView.setImageResource(R.color.blue)
             }
         }
     }
