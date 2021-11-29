@@ -26,7 +26,7 @@ class MainFrameAdapter(val dungeon: Array<IntArray>) :
             Log.d("data", "${data}")
 
             binding.imageView.setImageBitmap(null)
-            if (data != 0) {
+            if (!data.isZero()) {
                 binding.imageView.setBackgroundResource(R.drawable.tile_on)
             } else {
                 binding.imageView.setBackgroundResource(R.drawable.tile_off)
@@ -179,7 +179,7 @@ class MainFrameAdapter(val dungeon: Array<IntArray>) :
         hero_Position_X = hero_position / 25
         hero_Position_Y = hero_position % 25
 
-        if (position % 7 == 0 && position >= 7) tileIndex += 1
+        if ((position % 7).isZero() && position >= 7) tileIndex += 1
 
         dungeon_x = hero_Position_X - 3 + tileIndex
         dungeon_y = hero_Position_Y - 3

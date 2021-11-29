@@ -1,6 +1,9 @@
 package com.example.roguelikeexample
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
+import kotlinx.android.synthetic.main.list_item.view.*
 import java.lang.Math.abs
 import java.util.*
 import kotlin.random.Random
@@ -26,17 +29,66 @@ object Settings {
     var HeroLevel = 1
     var HeroMaxHP = 100
     var HeroCurrentHP = HeroMaxHP
-    var HeroPower = 30
+    var HeroPower = 23
     var HeroEXP = 0
     var HeroEXP_MAX = 100
+    var HeroArmor = 2
+
+    var advancedPotion = 0
+    var potion = 0
+    var weapon: Array<Int> = Array(4,{0})
+    var armor: Array<Int> = Array(4,{0})
+
+    var wornWeapon = 0
+    var isWornWeapon: Int? = null
+    var wornArmor = 0
+    var isWornArmor: Int? = null
+
 
 
     init {
         createMap()
         randomSpawn()
-
     }
 
+    fun restart(){
+        floor = 1
+        HeroLevel = 1
+        HeroMaxHP = 100
+        HeroCurrentHP = HeroMaxHP
+        HeroPower = 30
+        HeroArmor = 2
+        HeroEXP = 0
+        HeroEXP_MAX = 100
+    }
+
+    fun saveData(context: Context){
+        val prefs: SharedPreferences = context.getSharedPreferences(
+            "GameData",
+            Context.MODE_PRIVATE
+        )
+        val editor : SharedPreferences.Editor = prefs.edit()
+        editor.putInt("level", HeroLevel)
+        editor.putInt("floor", floor)
+        editor.commit()
+    }
+
+    fun loadData(context: Context): Boolean{
+        val prefs: SharedPreferences = context.getSharedPreferences(
+            "GameData",
+            Context.MODE_PRIVATE
+        )
+        val level = prefs.getInt("level",0)
+        val _floor = prefs.getInt("floor",0)
+
+        if(level.isZero() || _floor .isZero()){
+            return false
+        }else{
+            HeroLevel = level
+            floor = _floor
+        }
+        return true
+    }
     fun createMap(): Array<IntArray> {
         // dungeon 크기는 25 * 25
         dungeon = Array<IntArray>(25) { IntArray(25) }
@@ -68,10 +120,13 @@ object Settings {
 
         }
 
+
         createPath()
 
         return dungeon
     }
+
+
 
     private fun createPath() {
         for (j in 0..numberOfRooms) {
@@ -90,7 +145,7 @@ object Settings {
 
             // Log.d("distance ", "${x_distance},${y_distance}")
 
-            if (x_distance != 0) {
+            if (!x_distance .isZero()) {
                 for (x in 0..x_distance) {
                     if (X_DIRECTION.equals("MINUS")) {
                         dungeon[createdRoom[comparisonValue][0] - x][createdRoom[comparisonValue][1]] =
@@ -102,7 +157,7 @@ object Settings {
                 }
             }
 
-            if (y_distance != 0) {
+            if (!y_distance.isZero()) {
                 for (y in 0..y_distance) {
                     if (Y_DIRECTION.equals("MINUS")) {
                         dungeon[createdRoom[j][0]][createdRoom[j][1] + y] = 1
@@ -128,7 +183,7 @@ object Settings {
 
 
             // 방이 아직 생성이 안된 곳일 경우
-            if (dungeon[dungeon_x][dungeon_y] == 0) {
+            if (dungeon[dungeon_x][dungeon_y] .isZero()) {
 
                 // 방의 크기는 2 ~ 6
                 room_x = minRoomSize + (Random.nextInt(4))
@@ -142,39 +197,39 @@ object Settings {
                 }
 
                 for (j in 0..room_x) {
-                    if (j == 0) {
-                        if (dungeon[dungeon_x - 1][dungeon_y] != 0) {
+                    if (j .isZero()) {
+                        if (!dungeon[dungeon_x - 1][dungeon_y] .isZero()) {
                             continue@DuplicateCheck
                         }
                     }
-                    if (dungeon[dungeon_x + j][dungeon_y - 1] != 0) {
+                    if (!dungeon[dungeon_x + j][dungeon_y - 1] .isZero()) {
                         continue@DuplicateCheck
                     }
-                    if (dungeon[dungeon_x + j][dungeon_y] != 0) {
+                    if (!dungeon[dungeon_x + j][dungeon_y] .isZero()) {
                         continue@DuplicateCheck
                     }
 
                     for (k in 0..room_y) {
-                        if (k == 0) {
-                            if (dungeon[dungeon_x][dungeon_y - 1] != 0) {
+                        if (k .isZero()) {
+                            if (!dungeon[dungeon_x][dungeon_y - 1] .isZero()) {
                                 continue@DuplicateCheck
                             }
                         }
-                        if (dungeon[dungeon_x][dungeon_y + k] != 0) {
+                        if (!dungeon[dungeon_x][dungeon_y + k] .isZero()) {
                             continue@DuplicateCheck
                         }
 
-                        if (dungeon[dungeon_x - 1][dungeon_y + k] != 0) {
+                        if (!dungeon[dungeon_x - 1][dungeon_y + k] .isZero()) {
                             continue@DuplicateCheck
                         }
 
                         if (dungeon_x + j < dungeon.size) {
-                            if (j == room_x && dungeon[dungeon_x + j + 1][dungeon_y + k] != 0) {
+                            if (j == room_x && !dungeon[dungeon_x + j + 1][dungeon_y + k].isZero()) {
                                 continue@DuplicateCheck
                             }
                         }
                         if (k == room_y && dungeon_y + k < dungeon.size) {
-                            if (dungeon[dungeon_x + j][dungeon_y + k + 1] != 0) {
+                            if (!dungeon[dungeon_x + j][dungeon_y + k + 1] .isZero()) {
                                 continue@DuplicateCheck
                             }
                         }
@@ -311,11 +366,11 @@ object Settings {
             DIRECTION.contains("MINUS") -> {
                 Log.d("Hero In", "MINUS")
                 if (beforeMonsterX < heroPositionX) {
-                    if (dungeon[beforeMonsterX + 1][beforeMonsterY] != 0) {
+                    if (!dungeon[beforeMonsterX + 1][beforeMonsterY].isZero()) {
                         afterMonsterX++
                         monsterDistance = MOVE_TOP
                     } else if (heroPositionY > afterMonsterY &&
-                        dungeon[beforeMonsterX][beforeMonsterY + 1] != 0
+                        !dungeon[beforeMonsterX][beforeMonsterY + 1].isZero()
                     ) {
                         afterMonsterY++
                         monsterDistance = MOVE_RIGHT
@@ -324,8 +379,13 @@ object Settings {
                         monsterDistance = MOVE_LEFT
                     }
                 } else if (beforeMonsterX == heroPositionX) {
-                    afterMonsterY++
-                    monsterDistance = MOVE_RIGHT
+                    if(!dungeon[beforeMonsterX][beforeMonsterY + 1].isZero()){
+                        afterMonsterY++
+                        monsterDistance = MOVE_RIGHT
+                    }else{
+                        afterMonsterX++
+                        monsterDistance = MOVE_TOP
+                    }
                 }
                 Log.d("HeroPosition", "${afterMonsterY}")
                 Log.d("HeroPosition", "${afterMonsterX}")
@@ -334,11 +394,11 @@ object Settings {
             DIRECTION.contains("PLUS") -> {
                 Log.d("Hero In", "PLUS")
                 if (heroPositionX < beforeMonsterX) {
-                    if (dungeon[beforeMonsterX - 1][beforeMonsterY] != 0) {
+                    if (!dungeon[beforeMonsterX - 1][beforeMonsterY].isZero()) {
                         afterMonsterX--
                         monsterDistance = MOVE_BOTTOM
                     } else if (heroPositionY > afterMonsterY &&
-                        dungeon[beforeMonsterX][beforeMonsterY - 1] != 0
+                        !dungeon[beforeMonsterX][beforeMonsterY - 1].isZero()
                     ) {
                         afterMonsterY++
                         monsterDistance = MOVE_RIGHT
@@ -347,7 +407,7 @@ object Settings {
                         monsterDistance = MOVE_LEFT
                     }
                 } else if (beforeMonsterX == heroPositionX) {
-                    if (dungeon[beforeMonsterX][beforeMonsterY - 1] != 0) {
+                    if (!dungeon[beforeMonsterX][beforeMonsterY - 1].isZero()) {
                         afterMonsterY--
                         monsterDistance = MOVE_LEFT
                     } else {
@@ -377,7 +437,7 @@ object Settings {
 
 
         if (abs(monster_position[focusIndex] - hero_position) == 1
-            || abs(monster_position[focusIndex] - hero_position) == 0
+            || abs(monster_position[focusIndex] - hero_position) .isZero()
             || abs(monster_position[focusIndex] - hero_position) == dungeon.size
         ) {
             return true
@@ -388,7 +448,7 @@ object Settings {
     fun statusUpdate(monsterEXP: Int) {
         val x = monster_position[focusIndex] / 25
         val y = monster_position[focusIndex] % 25
-        val beforeLevel = HeroLevel
+        var beforeLevel = HeroLevel
 
         dungeon[x][y] = 1
 
@@ -400,10 +460,13 @@ object Settings {
         }
         HeroEXP_MAX = HeroLevel * 70 + 30
         HeroMaxHP = HeroLevel * 30 + 70
-        HeroPower = HeroLevel * 15 + 15
+        HeroPower = HeroLevel * 8 + 15 + wornWeapon
+        HeroArmor = HeroLevel * 2 + wornArmor
+
         if(beforeLevel != HeroLevel){
-            HeroCurrentHP = HeroMaxHP
+            HeroCurrentHP = HeroLevel * 30 + 70
         }
+
     }
     fun monsterStatus(monsterId: Int): Monster? {
         var monsterName = ""
@@ -460,7 +523,7 @@ object Settings {
                 monsterName = "꿀잼 티모"
                 monsterLevel = 3
                 monsterHp = 200
-                monsterPower = 20
+                monsterPower = 30
                 monsterImage = R.drawable.monster3_bottom
                 monsterMainImage = R.drawable.battle_monster_3
                 monsterEXP = 120
@@ -475,10 +538,10 @@ object Settings {
                     monsterEXP
                 )
             }
-            4 -> {
+            3 -> {
                 monsterName = "우주 전갈 스카너"
                 monsterLevel = 4
-                monsterHp = 250
+                monsterHp = 300
                 monsterPower = 25
                 monsterImage = R.drawable.monster4_bottom
                 monsterMainImage = R.drawable.battle_monster_4
@@ -494,11 +557,11 @@ object Settings {
                     monsterEXP
                 )
             }
-            5 -> {
+            4 -> {
                 monsterName = "카시오페아"
                 monsterLevel = 5
-                monsterHp = 300
-                monsterPower = 30
+                monsterHp = 400
+                monsterPower = 35
                 monsterImage = R.drawable.monster5_bottom
                 monsterMainImage = R.drawable.battle_monster_5
                 monsterEXP = 180
@@ -513,13 +576,13 @@ object Settings {
                     monsterEXP
                 )
             }
-            6 -> {
-                monsterName = "벨코즈"
+            5 -> {
+                monsterName = "엘리스"
                 monsterLevel = 6
-                monsterHp = 350
-                monsterPower = 35
-                monsterImage = R.drawable.monster7_bottom
-                monsterMainImage = R.drawable.battle_monster_7
+                monsterHp = 400
+                monsterPower = 45
+                monsterImage = R.drawable.monster6_bottom
+                monsterMainImage = R.drawable.battle_monster_6
                 monsterEXP = 210
 
                 monster = Monster(
@@ -532,11 +595,81 @@ object Settings {
                     monsterEXP
                 )
             }
-            7 -> {
+            6 -> {
+                monsterName = "벨코즈"
+                monsterLevel = 7
+                monsterHp = 450
+                monsterPower = 50
+                monsterImage = R.drawable.monster7_bottom
+                monsterMainImage = R.drawable.battle_monster_7
+                monsterEXP = 240
+
+                monster = Monster(
+                    monsterName,
+                    monsterLevel,
+                    monsterHp,
+                    monsterPower,
+                    monsterImage,
+                    monsterMainImage,
+                    monsterEXP
+                )
             }
         }
 
         return monster
+    }
+
+    fun getItem(): Bag {
+        return Bag(advancedPotion, potion, weapon, armor)
+    }
+
+    fun haveItem(): ArrayList<String> {
+        val itemList = ArrayList<String>()
+        val data = getItem()
+
+        if(data.advancedPotion.isHave() > 0){
+            itemList.add("advancedPotion")
+        }
+        if(data.potion.isHave() > 0){
+            itemList.add("potion")
+        }
+        for (i in weapon.indices) {
+            if (!weapon[i].isHave().isZero()) {
+                when (i) {
+                    0 -> {
+                       itemList.add("weapon${i}")
+                    }
+                    1 -> {
+                        itemList.add("weapon${i}")
+                    }
+                    2 -> {
+                        itemList.add("weapon${i}")
+                    }
+                    3 -> {
+                        itemList.add("weapon${i}")
+                    }
+                }
+            }
+        }
+        for (i in armor.indices) {
+            if (!armor[i].isHave().isZero()) {
+                when (i) {
+                    0 -> {
+                        itemList.add("armor${i}")
+                    }
+                    1 -> {
+                        itemList.add("armor${i}")
+                    }
+                    2 -> {
+                        itemList.add("armor${i}")
+                    }
+                    3 -> {
+                        itemList.add("armor${i}")
+                    }
+                }
+            }
+        }
+        return itemList
     }
 
     data class Monster(
@@ -544,11 +677,10 @@ object Settings {
         val monsterImage: Int, val monsterMainImage: Int, val monsterEXP: Int
     )
 
-    data class Hero(
-        var HeroLevel: Int,
-        var HeroHP: Int,
-        var HeroPower: Int,
-        var HeroEX: Int,
-        var HeroEXP_MAX: Int
+    data class Bag(
+        var advancedPotion: Int,
+        var potion: Int,
+        var weapon: Array<Int>,
+        var armor: Array<Int>,
     )
 }

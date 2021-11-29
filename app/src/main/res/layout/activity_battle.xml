@@ -11,56 +11,57 @@
             android:id="@+id/btn_attack"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/grey"
+            android:layout_marginBottom="5dp"
+            android:background="@color/grey"
             android:text="기본 공격"
+            android:textColor="@color/white"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/btn_skill_1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/btn_skill_1"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintEnd_toEndOf="@+id/btn_skill_1"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/btn_skill_1" />
 
         <Button
             android:id="@+id/btn_skill_1"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/black"
             android:text="레벨 3 때 오픈됩니다."
-            android:backgroundTint="@color/black"
             android:textColor="@color/white"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.85" />
+            app:layout_constraintBottom_toTopOf="@+id/btn_skill_2"
+            app:layout_constraintEnd_toEndOf="@+id/btn_skill_2"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/btn_skill_2" />
 
         <Button
             android:id="@+id/btn_skill_2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@color/black"
             android:text="레벨 5 때 오픈됩니다."
-            android:backgroundTint="@color/black"
             android:textColor="@color/white"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/btn_skill_3"
-            app:layout_constraintEnd_toEndOf="@+id/btn_skill_1"
-            app:layout_constraintStart_toStartOf="@+id/btn_skill_1"
-            app:layout_constraintTop_toBottomOf="@+id/btn_skill_1" />
+            app:layout_constraintEnd_toEndOf="@+id/btn_skill_3"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/btn_skill_3" />
 
         <Button
             android:id="@+id/btn_skill_3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
+            android:background="@color/black"
             android:text="레벨 7 때 오픈됩니다."
-            android:backgroundTint="@color/black"
             android:textColor="@color/white"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/btn_skill_2"
-            app:layout_constraintStart_toStartOf="@+id/btn_skill_2" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.4" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/monster_status_layout"
@@ -223,6 +224,20 @@
             app:lottie_rawRes="@raw/attack"
             app:lottie_autoPlay="false"
             app:lottie_loop="false" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.241"
+            app:layout_constraintStart_toStartOf="@+id/imageView3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.397"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="false"
+            app:lottie_rawRes="@raw/attack" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

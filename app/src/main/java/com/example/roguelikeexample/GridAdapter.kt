@@ -12,7 +12,7 @@ import com.example.roguelikeexample.databinding.GridItemBinding
 
 class GridAdapter(val dungeon: Array<IntArray>) : RecyclerView.Adapter<GridAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GridAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
