@@ -1,9 +1,13 @@
 package com.example.roguelikeexample
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.roguelikeexample.Settings.HeroArmor
 import com.example.roguelikeexample.Settings.HeroCurrentHP
@@ -27,6 +31,7 @@ import org.jetbrains.anko.yesButton
 
 class StatusActivity : AppCompatActivity() {
     var adapter = BagAdapter(this)
+    private lateinit var changeHandler: Handler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,37 +65,46 @@ class StatusActivity : AppCompatActivity() {
             }
             iv_weapon.isClickable = true
         }
+
         iv_weapon.setOnClickListener {
-            alert("장비를 해제하시겠습니까 ?", "착용 해제") {
-                yesButton {
-                    Toast.makeText(
-                        this@StatusActivity,
-                        "착용하신 아이템이 해제되었습니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    isWornWeapon = null
-                    when (wornWeapon) {
-                        5 -> {
-                            weapon[0]++
+            if (iv_weapon.isClickable) {
+
+                alert("장비를 해제하시겠습니까 ?", "착용 해제") {
+                    yesButton {
+                        Toast.makeText(
+                            this@StatusActivity,
+                            "착용하신 아이템이 해제되었습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        isWornWeapon = null
+                        iv_weapon.isClickable = false
+                        when (wornWeapon) {
+                            5 -> {
+                                weapon[0]++
+                            }
+                            10 -> {
+                                weapon[1]++
+                            }
+                            25 -> {
+                                weapon[2]++
+                            }
+                            50 -> {
+                                weapon[3]++
+                            }
                         }
-                        10 -> {
-                            weapon[1]++
-                        }
-                        25 -> {
-                            weapon[2]++
-                        }
-                        50 -> {
-                            weapon[3]++
-                        }
+                        HeroPower -= wornWeapon
+                        wornWeapon = 0
+                        tv_status_weapon.text = resources.getString(R.string.status_power, HeroPower)
+                        iv_weapon.setImageResource(R.drawable.empty_image)
+                        changeHandler.sendEmptyMessage(0)
                     }
-                    wornWeapon = 0
-                    iv_weapon.setImageResource(R.drawable.empty_image)
-                    adapter.notifyDataSetChanged()
-                }
-                noButton {}
-                isCancelable = false
-            }.show()
+                    noButton {}
+                    isCancelable = false
+                }.show()
+            }
         }
+
+
 
         if (isWornArmor != null) {
             when (wornArmor) {
@@ -108,44 +122,58 @@ class StatusActivity : AppCompatActivity() {
                 }
             }
             iv_armor.isClickable = true
-
         }
 
         iv_armor.setOnClickListener {
-            alert("장비를 해제하시겠습니까 ?", "착용 해제") {
-                yesButton {
-                    Toast.makeText(
-                        this@StatusActivity,
-                        "착용하신 아이템이 해제되었습니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    isWornArmor = null
-                    when (wornArmor) {
-                        3 -> {
-                            armor[0]++
+            if (iv_armor.isClickable) {
+                alert("장비를 해제하시겠습니까 ?", "착용 해제") {
+                    yesButton {
+                        Toast.makeText(
+                            this@StatusActivity,
+                            "착용하신 아이템이 해제되었습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        isWornArmor = null
+                        iv_armor.isClickable = false
+                        when (wornArmor) {
+                            3 -> {
+                                armor[0]++
+                            }
+                            5 -> {
+                                armor[1]++
+                            }
+                            10 -> {
+                                armor[2]++
+                            }
+                            18 -> {
+                                armor[3]++
+                            }
                         }
-                        5 -> {
-                            armor[1]++
-                        }
-                        10 -> {
-                            armor[2]++
-                        }
-                        18 -> {
-                            armor[3]++
-                        }
+                        iv_armor.setImageResource(R.drawable.empty_image)
+                        wornArmor = 0
+                        HeroArmor -= wornArmor
+                        tv_status_armor.text = resources.getString(R.string.status_armor, HeroArmor)
+                        changeHandler.sendEmptyMessage(0)
+
                     }
-                    iv_armor.setImageResource(R.drawable.empty_image)
-                    wornArmor = 0
-                    adapter.notifyDataSetChanged()
-                }
-                noButton {}
-                isCancelable = false
-            }.show()
+                    noButton {}
+                    isCancelable = false
+                }.show()
+            }
         }
+
 
         btn_finish.setOnClickListener {
             startActivity<MainActivity>()
             finish()
         }
+
+        changeHandler = @SuppressLint("HandlerLeak")
+            object : Handler() {
+                override fun handleMessage(msg: Message) {
+                    super.handleMessage(msg)
+                    adapter.setData(haveItem())
+                }
+            }
     }
 }

@@ -25,6 +25,7 @@ object Settings {
     var monsterDistance = 0
     var stair_respawn = false
     var focusIndex = 0
+    val last_floor = 8
 
     var HeroLevel = 1
     var HeroMaxHP = 100
@@ -60,6 +61,9 @@ object Settings {
         HeroArmor = 2
         HeroEXP = 0
         HeroEXP_MAX = 100
+
+        createMap()
+        randomSpawn()
     }
 
     fun saveData(context: Context){
@@ -603,6 +607,25 @@ object Settings {
                 monsterImage = R.drawable.monster7_bottom
                 monsterMainImage = R.drawable.battle_monster_7
                 monsterEXP = 240
+
+                monster = Monster(
+                    monsterName,
+                    monsterLevel,
+                    monsterHp,
+                    monsterPower,
+                    monsterImage,
+                    monsterMainImage,
+                    monsterEXP
+                )
+            }
+            7 -> {
+                monsterName = "모르가나"
+                monsterLevel = 8
+                monsterHp = 700
+                monsterPower = 70
+                monsterImage = R.drawable.boss
+                monsterMainImage = R.drawable.battle_boss
+                monsterEXP = 300
 
                 monster = Monster(
                     monsterName,

@@ -243,6 +243,8 @@ class BagAdapter(val context: StatusActivity) : RecyclerView.Adapter<MyViewHolde
                                         }
                                         Toast.makeText(itemView.context, text, Toast.LENGTH_SHORT)
                                             .show()
+                                        context.iv_weapon.isClickable = true
+
                                     }
                                 }
                                 "weapon1" -> {
@@ -268,6 +270,8 @@ class BagAdapter(val context: StatusActivity) : RecyclerView.Adapter<MyViewHolde
                                         }
                                         Toast.makeText(itemView.context, text, Toast.LENGTH_SHORT)
                                             .show()
+                                        context.iv_weapon.isClickable = true
+
                                     }
                                 }
                                 "weapon2" -> {
@@ -293,6 +297,8 @@ class BagAdapter(val context: StatusActivity) : RecyclerView.Adapter<MyViewHolde
                                         }
                                         Toast.makeText(itemView.context, text, Toast.LENGTH_SHORT)
                                             .show()
+                                        context.iv_weapon.isClickable = true
+
                                     }
                                 }
                                 "weapon3" -> {
@@ -318,6 +324,8 @@ class BagAdapter(val context: StatusActivity) : RecyclerView.Adapter<MyViewHolde
                                         }
                                         Toast.makeText(itemView.context, text, Toast.LENGTH_SHORT)
                                             .show()
+                                        context.iv_weapon.isClickable = true
+
                                     }
                                 }
                                 "armor0" -> {
@@ -343,6 +351,8 @@ class BagAdapter(val context: StatusActivity) : RecyclerView.Adapter<MyViewHolde
                                         }
                                         Toast.makeText(itemView.context, text, Toast.LENGTH_SHORT)
                                             .show()
+                                        context.iv_armor.isClickable = true
+
                                     }
                                 }
                                 "armor1" -> {
@@ -368,6 +378,8 @@ class BagAdapter(val context: StatusActivity) : RecyclerView.Adapter<MyViewHolde
                                         }
                                         Toast.makeText(itemView.context, text, Toast.LENGTH_SHORT)
                                             .show()
+                                        context.iv_armor.isClickable = true
+
                                     }
                                 }
                                 "armor2" -> {
@@ -393,6 +405,8 @@ class BagAdapter(val context: StatusActivity) : RecyclerView.Adapter<MyViewHolde
                                         }
                                         Toast.makeText(itemView.context, text, Toast.LENGTH_SHORT)
                                             .show()
+                                        context.iv_armor.isClickable = true
+
                                     }
                                 }
                                 "armor3" -> {
@@ -418,6 +432,7 @@ class BagAdapter(val context: StatusActivity) : RecyclerView.Adapter<MyViewHolde
                                         }
                                         Toast.makeText(itemView.context, text, Toast.LENGTH_SHORT)
                                             .show()
+                                        context.iv_armor.isClickable = true
                                     }
                                 }
                             }
@@ -551,5 +566,10 @@ class BagAdapter(val context: StatusActivity) : RecyclerView.Adapter<MyViewHolde
         } else {
             holder.bind(data[position])
         }
+    }
+    @JvmName("setData1")
+    fun setData(datas: ArrayList<String>){
+        data = datas
+        this@BagAdapter.notifyDataSetChanged()
     }
 }

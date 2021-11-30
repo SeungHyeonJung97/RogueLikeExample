@@ -9,9 +9,12 @@ import android.util.Log
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.roguelikeexample.Settings.HeroArmor
+import com.example.roguelikeexample.Settings.HeroPower
 import com.example.roguelikeexample.Settings.advancedPotion
 import com.example.roguelikeexample.Settings.armor
 import com.example.roguelikeexample.Settings.checkHeroBoundary
+import com.example.roguelikeexample.Settings.floor
 import com.example.roguelikeexample.Settings.monsterMove
 import com.example.roguelikeexample.Settings.potion
 import com.example.roguelikeexample.Settings.saveData
@@ -38,11 +41,6 @@ class MainActivity : AppCompatActivity() {
         binding.btnOpenMap.setOnClickListener {
             startActivity<OpenMapActivity>()
         }
-
-        armor[0] = 10
-        weapon[0] = 10
-        potion = 2
-        advancedPotion = 2
 
         binding.textView.text = resources.getString(R.string.stage, Settings.floor)
         binding.rvMainframe.layoutManager = GridLayoutManager(this, 7)

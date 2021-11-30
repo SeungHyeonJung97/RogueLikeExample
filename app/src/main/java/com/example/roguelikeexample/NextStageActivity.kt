@@ -12,16 +12,26 @@ class NextStageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_next_stage)
 
         Settings.floor += 1
-        textView2.text = resources.getString(R.string.stage,Settings.floor)
-
-        Settings.createMap()
-        Settings.randomSpawn()
+        if(Settings.floor == Settings.last_floor){
+            textView2.text = "마지막 보스에게 도전하시겠습니까 ?"
+            button.text = "도전하기"
+        }else{
+            textView2.text = resources.getString(R.string.stage,Settings.floor)
+            Settings.createMap()
+            Settings.randomSpawn()
+        }
 
         button.setOnClickListener{
-            startActivity<MainActivity>()
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+            if(Settings.floor == Settings.last_floor){
+                startActivity<BattleActivity>()
+                finish()
+            }else{
+                startActivity<MainActivity>()
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
 
-            finish()
+                finish()
+            }
+
         }
     }
 }

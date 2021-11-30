@@ -19,6 +19,8 @@ import com.example.roguelikeexample.Settings.HeroMaxHP
 import com.example.roguelikeexample.Settings.HeroPower
 import com.example.roguelikeexample.Settings.advancedPotion
 import com.example.roguelikeexample.Settings.armor
+import com.example.roguelikeexample.Settings.floor
+import com.example.roguelikeexample.Settings.last_floor
 import com.example.roguelikeexample.Settings.potion
 import com.example.roguelikeexample.Settings.statusUpdate
 import com.example.roguelikeexample.Settings.weapon
@@ -30,7 +32,7 @@ import kotlin.random.Random
 
 class BattleActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBattleBinding
-    val monster = Settings.monsterStatus(Settings.focusIndex)!!
+    var monster = Settings.monsterStatus(Settings.focusIndex)!!
     var monsterCurrentHP = monster.monsterMaxHp
     private lateinit var battleHandler: Handler
     val MONSTER = 0
@@ -41,6 +43,7 @@ class BattleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_battle)
+
 
         skillByLevelSettings()
         battleSettings()
@@ -76,7 +79,7 @@ class BattleActivity : AppCompatActivity() {
                                     dropItem = "하급 방어구"
                                 }
 
-                                if(dropItem.isEmpty()){
+                                if (dropItem.isEmpty()) {
                                     dropItem = "없음"
                                 }
                                 alert(
@@ -84,8 +87,19 @@ class BattleActivity : AppCompatActivity() {
                                     "승리 !"
                                 ) {
                                     yesButton {
-                                        startActivity<MainActivity>()
-                                        finish()
+                                        if (floor == last_floor) {
+                                            alert("축하드립니다 !\n보스에게 승리하셨습니다.", "게임 종료") {
+                                                yesButton {
+                                                    startActivity<TitleActivity>()
+                                                    finish()
+                                                }
+                                                isCancelable = false
+                                            }.show()
+
+                                        } else {
+                                            startActivity<MainActivity>()
+                                            finish()
+                                        }
                                     }
                                     isCancelable = false
                                 }.show()
@@ -104,7 +118,7 @@ class BattleActivity : AppCompatActivity() {
                             binding.heroHit.visibility = View.VISIBLE
                             binding.heroHit.playAnimation()
                             HeroCurrentHP -= (msg.arg1 - HeroArmor)
-                            binding.pbHeroHp.incrementProgressBy(- (msg.arg1 - HeroArmor))
+                            binding.pbHeroHp.incrementProgressBy(-(msg.arg1 - HeroArmor))
                             if (HeroCurrentHP <= 0) {
                                 HeroCurrentHP = 0
                                 alert("더 강해져서 도전하세요 ..", "패배 !") {
@@ -133,6 +147,7 @@ class BattleActivity : AppCompatActivity() {
             message_monster.what = MONSTER
             message_monster.arg1 = HeroPower
             monster_hit.visibility = View.VISIBLE
+            monster_hit.setAnimation(R.raw.attack)
             monster_hit.playAnimation()
 
             battleHandler.sendMessage(message_monster)
@@ -298,6 +313,11 @@ class BattleActivity : AppCompatActivity() {
     }
 
     private fun battleSettings() {
+
+        if (Settings.floor == Settings.last_floor) {
+            monster = Settings.monsterStatus(7)!!
+            monsterCurrentHP = monster.monsterMaxHp
+        }
 
         binding.ivMonsterMain.setImageResource(monster.monsterMainImage)
         binding.ivMonster.setImageResource(monster.monsterImage)
